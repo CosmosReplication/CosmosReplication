@@ -1,0 +1,18 @@
+<Project>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- Add shared package versions here -->
+        <PackageVersion Include="Azure.Identity" Version="1.14.2" />
+        <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.52.1" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+        <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions"
+            Version="9.0.8" />
+        <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
+        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.8" />
+        <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageVersion Include="MinVer" Version="6.0.0" />
+    </ItemGroup>
+</Project>
