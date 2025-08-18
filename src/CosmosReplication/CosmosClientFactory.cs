@@ -1,5 +1,3 @@
-namespace CosmosReplication;
-
 using Azure.Identity;
 
 using CosmosReplication.Interfaces;
@@ -7,46 +5,46 @@ using CosmosReplication.Models;
 
 using Microsoft.Azure.Cosmos;
 
+namespace CosmosReplication;
+
 public class CosmosClientFactory : ICosmosClientFactory
 {
-    private readonly Dictionary<string, CosmosAccountConfiguration> _cosmosAccountConfigurations;
-    private readonly Dictionary<string, CosmosClient> _cosmosClients;
-    private readonly CosmosClientOptions _cosmosClientOptions;
+	private readonly Dictionary<string, CosmosAccountConfiguration> _cosmosAccountConfigurations;
+	private readonly Dictionary<string, CosmosClient> _cosmosClients;
+	private readonly CosmosClientOptions _cosmosClientOptions;
 
-    public CosmosClientFactory(ReplicationConfiguration replicationConfiguration)
-    {
-        _cosmosAccountConfigurations = replicationConfiguration.CosmosAccounts.ToDictionary(x => x.AccountName);
-        _cosmosClients = [];
-        _cosmosClientOptions = new CosmosClientOptions
-        {
-            ConnectionMode = ConnectionMode.Gateway,
-            EnableContentResponseOnWrite = false,
-            AllowBulkExecution = true
-        };
-    }
+	public CosmosClientFactory(ReplicationConfiguration replicationConfiguration)
+	{
+		ArgumentNullException.ThrowIfNull(replicationConfiguration);
 
-    public CosmosClient GetCosmosClient(string accountName)
-    {
-        if (_cosmosClients.TryGetValue(accountName, out var cosmosClient))
-        {
-            return cosmosClient;
-        }
+		_cosmosAccountConfigurations = replicationConfiguration.CosmosAccounts.ToDictionary(x => x.AccountName);
+		_cosmosClients = [];
+		_cosmosClientOptions = new CosmosClientOptions
+		{
+			ConnectionMode = ConnectionMode.Gateway,
+			EnableContentResponseOnWrite = false,
+			AllowBulkExecution = true,
+		};
+	}
 
-        if (_cosmosAccountConfigurations.TryGetValue(accountName, out var options))
-        {
-            cosmosClient = GenerateClient(options);
-            _cosmosClients[accountName] = cosmosClient;
-            return cosmosClient;
-        }
+	public CosmosClient GetCosmosClient(string accountName)
+	{
+		if (_cosmosClients.TryGetValue(accountName, out var cosmosClient))
+		{
+			return cosmosClient;
+		}
 
-        throw new ArgumentException($"No CosmosAccount found for AccountName: {accountName}");
-    }
+		if (_cosmosAccountConfigurations.TryGetValue(accountName, out var options))
+		{
+			cosmosClient = GenerateClient(options);
+			_cosmosClients[accountName] = cosmosClient;
+			return cosmosClient;
+		}
 
-    private CosmosClient GenerateClient(CosmosAccountConfiguration options)
-    {
-        var cosmosClient = !string.IsNullOrEmpty(options.ConnectionString)
-            ? new CosmosClient(options.ConnectionString, _cosmosClientOptions)
-            : new CosmosClient(options.AccountEndpoint, new DefaultAzureCredential(), _cosmosClientOptions);
-        return cosmosClient;
-    }
+		throw new ArgumentException($"No CosmosAccount found for AccountName: {accountName}");
+	}
+
+	private CosmosClient GenerateClient(CosmosAccountConfiguration options) => !string.IsNullOrEmpty(options.ConnectionString)
+			? new CosmosClient(options.ConnectionString, _cosmosClientOptions)
+			: new CosmosClient(options.AccountEndpoint, new DefaultAzureCredential(), _cosmosClientOptions);
 }
