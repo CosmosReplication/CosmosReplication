@@ -1,7 +1,8 @@
 namespace CosmosReplication;
+
 using Azure.Identity;
 
-using CosmosReplication.Inerfaces;
+using CosmosReplication.Interfaces;
 using CosmosReplication.Models;
 
 using Microsoft.Azure.Cosmos;
@@ -38,7 +39,7 @@ public class CosmosClientFactory : ICosmosClientFactory
             return cosmosClient;
         }
 
-        throw new ArgumentException($"No CosmosAccountOptions found for account name: {accountName}");
+        throw new ArgumentException($"No CosmosAccount found for AccountName: {accountName}");
     }
 
     private CosmosClient GenerateClient(CosmosAccountConfiguration options)

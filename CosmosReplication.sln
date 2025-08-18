@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosReplication", "src\Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{9D96A84D-F398-40AD-86E5-601378632B7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleHostApplication", "samples\SampleHostApplication\SampleHostApplication.csproj", "{3A288B9C-1F9A-423B-9EF4-B593832557BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplicationServiceHost", "samples\ReplicationServiceHost\ReplicationServiceHost.csproj", "{E3CC9F49-8A16-44BD-921F-C7502BE0ECE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplicationEstimatorHost", "samples\ReplicationEstimatorHost\ReplicationEstimatorHost.csproj", "{45240830-7602-4151-9BEF-CC54FB62B1E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,16 +23,21 @@ Global
 		{2763A6F8-31EB-4652-9C6F-621E9F88D03C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2763A6F8-31EB-4652-9C6F-621E9F88D03C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2763A6F8-31EB-4652-9C6F-621E9F88D03C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A288B9C-1F9A-423B-9EF4-B593832557BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A288B9C-1F9A-423B-9EF4-B593832557BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A288B9C-1F9A-423B-9EF4-B593832557BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A288B9C-1F9A-423B-9EF4-B593832557BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3CC9F49-8A16-44BD-921F-C7502BE0ECE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3CC9F49-8A16-44BD-921F-C7502BE0ECE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3CC9F49-8A16-44BD-921F-C7502BE0ECE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3CC9F49-8A16-44BD-921F-C7502BE0ECE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45240830-7602-4151-9BEF-CC54FB62B1E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45240830-7602-4151-9BEF-CC54FB62B1E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45240830-7602-4151-9BEF-CC54FB62B1E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45240830-7602-4151-9BEF-CC54FB62B1E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2763A6F8-31EB-4652-9C6F-621E9F88D03C} = {F12FA2F3-C340-46CA-98B5-AF7F1A1D31E6}
-		{3A288B9C-1F9A-423B-9EF4-B593832557BA} = {9D96A84D-F398-40AD-86E5-601378632B7E}
+		{E3CC9F49-8A16-44BD-921F-C7502BE0ECE7} = {9D96A84D-F398-40AD-86E5-601378632B7E}
+		{45240830-7602-4151-9BEF-CC54FB62B1E9} = {9D96A84D-F398-40AD-86E5-601378632B7E}
 	EndGlobalSection
 EndGlobal

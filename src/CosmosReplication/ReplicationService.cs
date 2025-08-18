@@ -1,39 +1,39 @@
 namespace CosmosReplication;
+
+using CosmosReplication.Interfaces;
+
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-public class ReplicationService(ILogger<ReplicationService> logger, IEnumerable<ContainerReplication> containerReplications) : IHostedService
+public class ReplicationService(ILogger<ReplicationService> logger, IEnumerable<IContainerReplicationProcessor> containerReplications) : IHostedService
 {
-    private readonly ILogger<ReplicationService> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    private readonly IEnumerable<ContainerReplication> _containerReplications = containerReplications ?? throw new ArgumentNullException(nameof(containerReplications));
-
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         try
         {
-            _logger.ServiceStarting(nameof(ReplicationService));
-            foreach (var containerReplication in _containerReplications)
+            logger.ServiceStarting(nameof(ReplicationService));
+            foreach (var containerReplication in containerReplications)
             {
-                if (await containerReplication.InititializeAsync(cancellationToken))
+                if (await containerReplication.InitializeAsync(cancellationToken))
                 {
                     await containerReplication.StartAsync();
                 }
             }
-            _logger.ServiceStarted(nameof(ReplicationService));
+            logger.ServiceStarted(nameof(ReplicationService));
         }
         catch (Exception ex)
         {
-            _logger.ServiceStartFailed(nameof(ReplicationService), ex);
+            logger.ServiceStartFailed(nameof(ReplicationService), ex);
         }
     }
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.ServiceStopping(nameof(ReplicationService));
-        foreach (var containerReplication in _containerReplications)
+        logger.ServiceStopping(nameof(ReplicationService));
+        foreach (var containerReplication in containerReplications)
         {
             await containerReplication.StopAsync();
         }
-        _logger.ServiceStopped(nameof(ReplicationService));
+        logger.ServiceStopped(nameof(ReplicationService));
     }
 }

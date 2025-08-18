@@ -1,19 +1,20 @@
 namespace CosmosReplication;
 
-
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Net;
 
-using CosmosReplication.Inerfaces;
+using CosmosReplication.Interfaces;
 using CosmosReplication.Models;
 
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 
-public class ContainerReplication
+public class ContainerReplicationProcessor : IContainerReplicationProcessor
 {
 
-    public ContainerReplication(
-        ILogger<ContainerReplication> logger,
+    public ContainerReplicationProcessor(
+        ILogger<ContainerReplicationProcessor> logger,
         ICosmosClientFactory cosmosClientFactory,
         string replicationName,
         ContainerReplicationConfiguration config)
@@ -23,18 +24,18 @@ public class ContainerReplication
         _replicationName = replicationName ?? throw new ArgumentNullException(nameof(replicationName));
         _config = config ?? throw new ArgumentNullException(nameof(config));
 
-        _configDictionary = new Dictionary<string, object?>
-    {
-        { nameof(config.SourceAccount), config.SourceAccount },
-        { nameof(config.SourceDatabase), config.SourceDatabase },
-        { nameof(config.SourceContainer), config.SourceContainer },
-        { nameof(config.DestinationAccount), config.DestinationAccount },
-        { nameof(config.DestinationDatabase), config.DestinationDatabase },
-        { nameof(config.DestinationContainer), config.DestinationContainer },
-        { nameof(config.LeaseAccount), config.LeaseAccount },
-        { nameof(config.LeaseDatabase), config.LeaseDatabase },
-        { nameof(config.LeaseContainer), config.LeaseContainer }
-    };
+        _configDictionary = new List<KeyValuePair<string, object?>>
+        {
+            new(nameof(config.SourceAccount), config.SourceAccount),
+            new(nameof(config.SourceDatabase), config.SourceDatabase),
+            new(nameof(config.SourceContainer), config.SourceContainer),
+            new(nameof(config.DestinationAccount), config.DestinationAccount),
+            new(nameof(config.DestinationDatabase), config.DestinationDatabase),
+            new(nameof(config.DestinationContainer), config.DestinationContainer),
+            new(nameof(config.LeaseAccount), config.LeaseAccount),
+            new(nameof(config.LeaseDatabase), config.LeaseDatabase),
+            new(nameof(config.LeaseContainer), config.LeaseContainer)
+        }.AsReadOnly();
     }
 
     private ChangeFeedProcessor _changeFeedProcessor = null!;
@@ -44,13 +45,13 @@ public class ContainerReplication
     private Container _destinationContainer = null!;
     private ContainerProperties _destinationContainerProperties = null!;
     public bool Started { get; private set; }
-    private readonly ILogger<ContainerReplication> _logger;
-    private readonly Dictionary<string, object?> _configDictionary;
+    private readonly ILogger<ContainerReplicationProcessor> _logger;
+    private readonly ReadOnlyCollection<KeyValuePair<string, object?>> _configDictionary;
     private readonly ICosmosClientFactory _cosmosClientFactory;
     private readonly string _replicationName;
     private readonly ContainerReplicationConfiguration _config;
 
-    public async Task<bool> InititializeAsync(CancellationToken cancellationToken)
+    public async Task<bool> InitializeAsync(CancellationToken cancellationToken)
     {
         using (_logger.BeginScope(_configDictionary))
         {
@@ -58,7 +59,7 @@ public class ContainerReplication
             {
                 try
                 {
-                    _logger.ServiceInitializing(nameof(ContainerReplication));
+                    _logger.ServiceInitializing(nameof(ContainerReplicationProcessor));
 
                     var sourceContainer = _cosmosClientFactory.GetCosmosClient(_config.SourceAccount)
                         .GetContainer(_config.SourceDatabase, _config.SourceContainer);
@@ -88,16 +89,16 @@ public class ContainerReplication
                     _destinationContainerProperties = destinationContainerProperties;
                     Initialized = true;
 
-                    _logger.ServiceInitialized(nameof(ContainerReplication));
+                    _logger.ServiceInitialized(nameof(ContainerReplicationProcessor));
                 }
                 catch (Exception ex)
                 {
-                    _logger.ServiceInitializationFailed(nameof(ContainerReplication), ex);
+                    _logger.ServiceInitializationFailed(nameof(ContainerReplicationProcessor), ex);
                 }
             }
             else
             {
-                _logger.ServiceAlreadyInitialized(nameof(ContainerReplication));
+                _logger.ServiceAlreadyInitialized(nameof(ContainerReplicationProcessor));
             }
 
             return Initialized;
@@ -121,40 +122,41 @@ public class ContainerReplication
             {
                 try
                 {
-                    _logger.ServiceStarting(nameof(ContainerReplication));
+                    _logger.ServiceStarting(nameof(ContainerReplicationProcessor));
                     await _changeFeedProcessor.StartAsync();
-                    _logger.ServiceStarted(nameof(ContainerReplication));
+                    _logger.ServiceStarted(nameof(ContainerReplicationProcessor));
                     Started = true;
                 }
                 catch (Exception ex)
                 {
-                    _logger.ServiceStartFailed(nameof(ContainerReplication), ex);
+                    _logger.ServiceStartFailed(nameof(ContainerReplicationProcessor), ex);
                     Started = false;
                 }
             }
             else
             {
-                _logger.ServiceAlreadyStarted(nameof(ContainerReplication));
+                _logger.ServiceAlreadyStarted(nameof(ContainerReplicationProcessor));
             }
         }
     }
 
     public async Task StopAsync()
     {
-        using (_logger.BeginScope(_configDictionary))
+        if (Initialized && Started)
         {
-            if (Initialized && Started)
+            using (_logger.BeginScope(_configDictionary))
             {
-                _logger.ServiceStopping(nameof(ContainerReplication));
+                _logger.ServiceStopping(nameof(ContainerReplicationProcessor));
                 await _changeFeedProcessor.StopAsync();
-                _logger.ServiceStopped(nameof(ContainerReplication));
+                _logger.ServiceStopped(nameof(ContainerReplicationProcessor));
                 Started = false;
             }
         }
     }
 
-    public async Task MigrateChangesAsync(ChangeFeedProcessorContext context, IReadOnlyCollection<IDictionary<string, object?>> changes, CancellationToken cancellationToken)
+    private async Task MigrateChangesAsync(ChangeFeedProcessorContext context, IReadOnlyCollection<IDictionary<string, object?>> changes, CancellationToken cancellationToken)
     {
+
         if (_destinationContainer.Database.Client.ClientOptions.AllowBulkExecution
         && _config.BatchSize.HasValue
         && _config.BatchSize.Value > 1
@@ -200,7 +202,6 @@ public class ContainerReplication
                         }
                     }
                 }
-
                 await _destinationContainer.UpsertItemAsync(strippedItem, cancellationToken: cancellationToken);
                 if (item.ContainsKey("replication_status"))
                 {
@@ -208,10 +209,20 @@ public class ContainerReplication
                     await RemoveErrorDetailsFromSourceDocumentAsync(item, cancellationToken);
                 }
             }
-            catch (CosmosException cex) when (cex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            catch (TaskCanceledException tcex)
             {
-                _logger.RateLimitExceeded(cex, item["id"]?.ToString() ?? string.Empty);
-                await StopAsync();
+                _logger.UpsertItemError(tcex, item["id"]?.ToString() ?? string.Empty);
+                throw;
+            }
+            catch (OperationCanceledException ocex)
+            {
+                _logger.UpsertItemError(ocex, item["id"]?.ToString() ?? string.Empty);
+                throw;
+            }
+            catch (CosmosException cex) when (cex.StatusCode == HttpStatusCode.TooManyRequests)
+            {
+                _logger.UpsertItemError(cex, item["id"]?.ToString() ?? string.Empty);
+                throw;
             }
             catch (Exception ex)
             {
@@ -334,5 +345,4 @@ public class ContainerReplication
         var currentAge = currentTimestamp - sourceTimestamp;
         return defaultTTL - currentAge;
     }
-
 }

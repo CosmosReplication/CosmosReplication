@@ -1,7 +1,8 @@
-namespace CosmosReplication.Inerfaces;
+namespace CosmosReplication.Interfaces;
+
 using Microsoft.Azure.Cosmos;
 
 public interface ICosmosClientFactory
 {
-    CosmosClient GetCosmosClient(string accountName);
+    public CosmosClient GetCosmosClient(string accountName);
 }
