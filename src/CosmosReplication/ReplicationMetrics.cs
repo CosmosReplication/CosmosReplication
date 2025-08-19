@@ -2,6 +2,7 @@ using System.Diagnostics.Metrics;
 
 using CosmosReplication.Interfaces;
 using CosmosReplication.Models;
+using Microsoft.Extensions.Options;
 
 namespace CosmosReplication;
 
@@ -11,16 +12,19 @@ public class ReplicationMetrics : IReplicationMetrics, IDisposable
 	private readonly Gauge<long> _estimatedPendingChanges;
 	private bool _disposedValue;
 
-	public ReplicationMetrics(IMeterFactory meterFactory, ReplicationConfiguration replicationConfiguration)
+	public ReplicationMetrics(IMeterFactory meterFactory, IOptions<ReplicationConfiguration> options)
 	{
-		ArgumentNullException.ThrowIfNull(replicationConfiguration);
+		ArgumentNullException.ThrowIfNull(meterFactory);
+		ArgumentNullException.ThrowIfNull(options);
+		ArgumentNullException.ThrowIfNull(options.Value);
+
 		_meter = meterFactory.Create("CosmosReplication");
 		_estimatedPendingChanges = _meter.CreateGauge<long>(
 			name: "cosmosreplication.estimated_pending_changes",
 			description: "The estimated number of pending changes to be replicated.",
 			tags:
 			[
-				new KeyValuePair<string, object?>("replication_name", replicationConfiguration.Name)
+				new KeyValuePair<string, object?>("replication_name", options.Value.Name)
 			]);
 	}
 

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CosmosReplication.Interfaces;
 
 using Microsoft.Extensions.Hosting;
@@ -5,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CosmosReplication;
 
-public class ReplicationService(ILogger<ReplicationService> logger, IEnumerable<IContainerReplicationProcessor> containerReplications) : IHostedService
+public class ReplicationService(ILogger<ReplicationService> logger, ReadOnlyCollection<IContainerReplicationProcessor> containerReplications) : IHostedService
 {
 	public async Task StartAsync(CancellationToken cancellationToken)
 	{

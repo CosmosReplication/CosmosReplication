@@ -1,8 +1,10 @@
+using System.Collections.ObjectModel;
+using CosmosReplication.Interfaces;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace CosmosReplication;
 
-public class ReplicationHealthCheck(IEnumerable<ContainerReplicationProcessor> containerReplications) : IHealthCheck
+public class ReplicationHealthCheck(ReadOnlyCollection<IContainerReplicationProcessor> containerReplications) : IHealthCheck
 {
 	public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
 	{

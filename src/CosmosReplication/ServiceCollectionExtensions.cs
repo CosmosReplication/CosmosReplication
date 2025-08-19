@@ -3,27 +3,39 @@ using CosmosReplication.Models;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace CosmosReplication;
 
 public static class ServiceCollectionExtensions
 {
 	public static IServiceCollection AddCosmosReplication(
-		this IServiceCollection services,
-		ReplicationConfiguration replicationConfiguration)
+	this IServiceCollection services,
+	string configSectionPath)
 	{
-		ArgumentNullException.ThrowIfNull(replicationConfiguration);
-		services.AddSingleton(replicationConfiguration);
+		ArgumentNullException.ThrowIfNull(configSectionPath);
+		services.AddOptions<ReplicationConfiguration>()
+			.BindConfiguration(configSectionPath)
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
+
 		services.AddSingleton<ICosmosClientFactory, CosmosClientFactory>();
-		foreach (var config in replicationConfiguration.ContainerReplications)
+
+		services.AddSingleton(provider =>
 		{
-			services.AddSingleton<IContainerReplicationProcessor, ContainerReplicationProcessor>(provider =>
-			{
-				var factory = provider.GetRequiredService<ICosmosClientFactory>();
-				var logger = provider.GetRequiredService<ILogger<ContainerReplicationProcessor>>();
-				return new ContainerReplicationProcessor(logger, factory, replicationConfiguration.Name, config);
-			});
-		}
+			var logger = provider.GetRequiredService<ILogger<ContainerReplicationProcessor>>();
+			var cosmosClientFactory = provider.GetRequiredService<ICosmosClientFactory>();
+			var options = provider.GetRequiredService<IOptions<ReplicationConfiguration>>();
+			var replicationConfig = options.Value;
+
+			return replicationConfig.ContainerReplications
+				.Select(config =>
+					new ContainerReplicationProcessor(
+						logger,
+						cosmosClientFactory,
+						replicationConfig.Name,
+						config) as IContainerReplicationProcessor).ToList().AsReadOnly();
+		});
 
 		services.AddHealthChecks().AddCheck<ReplicationHealthCheck>("Replication Health Check", tags: ["cosmosreplication"]);
 		services.AddHostedService<ReplicationService>();
@@ -32,22 +44,33 @@ public static class ServiceCollectionExtensions
 
 	public static IServiceCollection AddCosmosReplicationEstimator(
 		this IServiceCollection services,
-		ReplicationConfiguration replicationConfiguration)
+		string configSectionPath)
 	{
-		ArgumentNullException.ThrowIfNull(replicationConfiguration);
-		services.AddSingleton(replicationConfiguration);
+		ArgumentNullException.ThrowIfNull(configSectionPath);
+		services.AddOptions<ReplicationConfiguration>()
+			.BindConfiguration(configSectionPath)
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
+
 		services.AddSingleton<ICosmosClientFactory, CosmosClientFactory>();
 		services.AddSingleton<IReplicationMetrics, ReplicationMetrics>();
-		foreach (var config in replicationConfiguration.ContainerReplications)
+		services.AddSingleton(provider =>
 		{
-			services.AddSingleton<IContainerReplicationEstimator, ContainerReplicationEstimator>(provider =>
-			{
-				var logger = provider.GetRequiredService<ILogger<ContainerReplicationEstimator>>();
-				var factory = provider.GetRequiredService<ICosmosClientFactory>();
-				var metrics = provider.GetRequiredService<IReplicationMetrics>();
-				return new ContainerReplicationEstimator(logger, metrics, factory, replicationConfiguration.Name, config);
-			});
-		}
+			var logger = provider.GetRequiredService<ILogger<ContainerReplicationEstimator>>();
+			var replicationMetrics = provider.GetRequiredService<IReplicationMetrics>();
+			var cosmosClientFactory = provider.GetRequiredService<ICosmosClientFactory>();
+			var options = provider.GetRequiredService<IOptions<ReplicationConfiguration>>();
+			var replicationConfig = options.Value;
+
+			return replicationConfig.ContainerReplications
+				.Select(config =>
+					new ContainerReplicationEstimator(
+						logger,
+						replicationMetrics,
+						cosmosClientFactory,
+						replicationConfig.Name,
+						config) as IContainerReplicationEstimator).ToList().AsReadOnly();
+		});
 
 		services.AddHostedService<ReplicationEstimatorService>();
 		return services;

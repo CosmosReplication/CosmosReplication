@@ -136,7 +136,7 @@ dotnet_naming_style.internal_error_style.required_suffix = ____INTERNAL_ERROR___
 dotnet_diagnostic.IDE0071.severity = warning
 
 # Allow multiple blank lines
-dotnet_diagnostic.IDE2000.severity = suggestion
+dotnet_diagnostic.IDE2000.severity = silent
 
 # All public/protected/protected_internal constant fields must be PascalCase
 # https://docs.microsoft.com/dotnet/standard/design-guidelines/field
@@ -685,7 +685,7 @@ dotnet_diagnostic.CA1815.severity = warning
 # Properties should not return arrays
 # Examples in Rock Your Code: Code Performance in Microsoft .NET
 # Examples in Rock Your Code: Coding Standards for Microsoft .NET
-dotnet_diagnostic.CA1819.severity = silent
+dotnet_diagnostic.CA1819.severity = suggestion
 dotnet_code_quality.CA1819.api_surface = public, protected
 
 # Test for empty strings using string length
@@ -2313,7 +2313,7 @@ dotnet_diagnostic.CA1200.severity = suggestion
 
 # Do not pass literals as localized parameters
 dotnet_code_quality.CA1303.use_naming_heuristic = true
-dotnet_diagnostic.CA1303.severity = suggestion
+dotnet_diagnostic.CA1303.severity = warning
 
 # Specify CultureInfo
 dotnet_diagnostic.CA1304.severity = error
@@ -2368,7 +2368,7 @@ dotnet_diagnostic.IDE0077.severity = warning
 
 # A violation of this rule occurs when a compilation (project) contains one or more files which are parsed with the DocumentationMode set to None. This most frequently occurs when the project is configured to not produce an XML documentation file during the build.
 # Examples in Rock Your Code: Coding Standards for Microsoft .NET
-dotnet_diagnostic.SA0001.severity = silent
+dotnet_diagnostic.SA0001.severity = warning
 
 # The spacing around a C# keyword is incorrect.
 dotnet_diagnostic.SA1000.severity = warning
@@ -2450,6 +2450,7 @@ dotnet_diagnostic.SA1513.severity = warning
 dotnet_diagnostic.SA1520.severity = error
 
 dotnet_diagnostic.SA1600.severity = none
+
 dotnet_diagnostic.SA1601.severity = none
 
 dotnet_diagnostic.SA1633.severity = none
@@ -2807,6 +2808,7 @@ dotnet_diagnostic.JSON002.severity = suggestion
 [*.{cs,vb}]
 # Invalid regex pattern
 dotnet_diagnostic.RE0001.severity = warning
+
 dotnet_diagnostic.CS1591.severity = none
 
 [*.g.cs]

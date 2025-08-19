@@ -1,7 +1,6 @@
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 
 using CosmosReplication;
-using CosmosReplication.Models;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
@@ -19,8 +18,7 @@ if (!string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNEC
 }
 builder.Services.AddHealthChecks();
 
-var replicationConfiguration = builder.Configuration.GetRequiredSection("ReplicationConfiguration").Get<ReplicationConfiguration>();
-builder.Services.AddCosmosReplication(replicationConfiguration);
+builder.Services.AddCosmosReplication("ReplicationConfiguration");
 
 using var app = builder.Build();
 app.MapHealthChecks("/healthz/startup");

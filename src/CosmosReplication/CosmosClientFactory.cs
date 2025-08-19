@@ -4,6 +4,7 @@ using CosmosReplication.Interfaces;
 using CosmosReplication.Models;
 
 using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Options;
 
 namespace CosmosReplication;
 
@@ -13,11 +14,12 @@ public class CosmosClientFactory : ICosmosClientFactory
 	private readonly Dictionary<string, CosmosClient> _cosmosClients;
 	private readonly CosmosClientOptions _cosmosClientOptions;
 
-	public CosmosClientFactory(ReplicationConfiguration replicationConfiguration)
+	public CosmosClientFactory(IOptions<ReplicationConfiguration> options)
 	{
-		ArgumentNullException.ThrowIfNull(replicationConfiguration);
+		ArgumentNullException.ThrowIfNull(options);
+		ArgumentNullException.ThrowIfNull(options.Value);
 
-		_cosmosAccountConfigurations = replicationConfiguration.CosmosAccounts.ToDictionary(x => x.AccountName);
+		_cosmosAccountConfigurations = options.Value.CosmosAccounts.ToDictionary(x => x.AccountName);
 		_cosmosClients = [];
 		_cosmosClientOptions = new CosmosClientOptions
 		{
