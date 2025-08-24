@@ -4,7 +4,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <PublishDir>../../artifacts/CosmosReplication.Host</PublishDir>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../src/CosmosReplication/CosmosReplication.csproj" />
+    <ProjectReference Include="../CosmosReplication/CosmosReplication.csproj" />
   </ItemGroup>
 
 </Project>

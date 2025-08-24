@@ -15,9 +15,9 @@ public class ReplicationService(ILogger<ReplicationService> logger, ReadOnlyColl
 			logger.ServiceStarting(nameof(ReplicationService));
 			foreach (var containerReplication in containerReplications)
 			{
-				if (await containerReplication.InitializeAsync(cancellationToken).ConfigureAwait(false))
+				if (await containerReplication.InitializeAsync(cancellationToken))
 				{
-					await containerReplication.StartAsync().ConfigureAwait(false);
+					await containerReplication.StartAsync();
 				}
 			}
 
@@ -34,7 +34,7 @@ public class ReplicationService(ILogger<ReplicationService> logger, ReadOnlyColl
 		logger.ServiceStopping(nameof(ReplicationService));
 		foreach (var containerReplication in containerReplications)
 		{
-			await containerReplication.StopAsync().ConfigureAwait(false);
+			await containerReplication.StopAsync();
 		}
 
 		logger.ServiceStopped(nameof(ReplicationService));

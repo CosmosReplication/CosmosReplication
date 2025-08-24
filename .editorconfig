@@ -1306,7 +1306,7 @@ dotnet_diagnostic.CA2000.severity = error
 dotnet_diagnostic.CA2002.severity = error
 
 # Do not directly await a Task
-dotnet_diagnostic.CA2007.severity = error
+dotnet_diagnostic.CA2007.severity = silent
 
 # Do not create tasks without passing a TaskScheduler
 dotnet_diagnostic.CA2008.severity = suggestion
@@ -2368,7 +2368,7 @@ dotnet_diagnostic.IDE0077.severity = warning
 
 # A violation of this rule occurs when a compilation (project) contains one or more files which are parsed with the DocumentationMode set to None. This most frequently occurs when the project is configured to not produce an XML documentation file during the build.
 # Examples in Rock Your Code: Coding Standards for Microsoft .NET
-dotnet_diagnostic.SA0001.severity = warning
+dotnet_diagnostic.SA0001.severity = none
 
 # The spacing around a C# keyword is incorrect.
 dotnet_diagnostic.SA1000.severity = warning
@@ -2553,7 +2553,7 @@ dotnet_diagnostic.VSTHRD110.severity = error
 
 # Use .ConfigureAwait(bool)
 # Examples in Rock Your Code: Coding Standards for Microsoft .NET
-dotnet_diagnostic.VSTHRD111.severity = error
+dotnet_diagnostic.VSTHRD111.severity = silent
 
 # Implement System.IAsyncDisposable
 dotnet_diagnostic.VSTHRD112.severity = error

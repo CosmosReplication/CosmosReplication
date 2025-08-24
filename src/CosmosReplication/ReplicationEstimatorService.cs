@@ -13,9 +13,9 @@ public class ReplicationEstimatorService(ILogger<ReplicationEstimatorService> lo
 		logger.ServiceStarting(nameof(ReplicationEstimatorService));
 		foreach (var estimator in estimators)
 		{
-			if (await estimator.InitializeAsync(cancellationToken).ConfigureAwait(false))
+			if (await estimator.InitializeAsync(cancellationToken))
 			{
-				await estimator.StartAsync().ConfigureAwait(false);
+				await estimator.StartAsync();
 			}
 		}
 
@@ -26,7 +26,7 @@ public class ReplicationEstimatorService(ILogger<ReplicationEstimatorService> lo
 	{
 		foreach (var estimator in estimators)
 		{
-			await estimator.StopAsync().ConfigureAwait(false);
+			await estimator.StopAsync();
 		}
 	}
 }

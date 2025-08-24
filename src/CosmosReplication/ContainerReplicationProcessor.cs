@@ -79,9 +79,9 @@ public class ContainerReplicationProcessor : IContainerReplicationProcessor
 						.GetContainer(_config.DestinationDatabase, _config.DestinationContainer);
 
 					// Checks if all required containers exist.
-					var sourceContainerProperties = (await sourceContainer.ReadContainerAsync(cancellationToken: cancellationToken).ConfigureAwait(false)).Resource;
-					await leaseContainer.ReadContainerAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
-					var destinationContainerProperties = (await destinationContainer.ReadContainerAsync(cancellationToken: cancellationToken).ConfigureAwait(false)).Resource;
+					var sourceContainerProperties = (await sourceContainer.ReadContainerAsync(cancellationToken: cancellationToken)).Resource;
+					await leaseContainer.ReadContainerAsync(cancellationToken: cancellationToken);
+					var destinationContainerProperties = (await destinationContainer.ReadContainerAsync(cancellationToken: cancellationToken)).Resource;
 
 					_changeFeedProcessor = sourceContainer
 						.GetChangeFeedProcessorBuilder<IDictionary<string, object?>>(_replicationName, MigrateChangesAsync)
@@ -124,7 +124,7 @@ public class ContainerReplicationProcessor : IContainerReplicationProcessor
 				try
 				{
 					_logger.ServiceStarting(nameof(ContainerReplicationProcessor));
-					await _changeFeedProcessor.StartAsync().ConfigureAwait(false);
+					await _changeFeedProcessor.StartAsync();
 					_logger.ServiceStarted(nameof(ContainerReplicationProcessor));
 					Started = true;
 				}
@@ -148,7 +148,7 @@ public class ContainerReplicationProcessor : IContainerReplicationProcessor
 			using (_logger.BeginScope(_configDictionary))
 			{
 				_logger.ServiceStopping(nameof(ContainerReplicationProcessor));
-				await _changeFeedProcessor.StopAsync().ConfigureAwait(false);
+				await _changeFeedProcessor.StopAsync();
 				_logger.ServiceStopped(nameof(ContainerReplicationProcessor));
 				Started = false;
 			}
@@ -234,14 +234,14 @@ public class ContainerReplicationProcessor : IContainerReplicationProcessor
 			foreach (var chunk in changes.Chunk(_config.BatchSize.Value))
 			{
 				var tasks = chunk.Select(item => UpsertDocumentAsync(item, cancellationToken));
-				await Task.WhenAll(tasks).ConfigureAwait(false);
+				await Task.WhenAll(tasks);
 			}
 		}
 		else
 		{
 			foreach (var item in changes)
 			{
-				await UpsertDocumentAsync(item, cancellationToken).ConfigureAwait(false);
+				await UpsertDocumentAsync(item, cancellationToken);
 			}
 		}
 	}
@@ -271,11 +271,11 @@ public class ContainerReplicationProcessor : IContainerReplicationProcessor
 					}
 				}
 
-				await _destinationContainer.UpsertItemAsync(strippedItem, cancellationToken: cancellationToken).ConfigureAwait(false);
+				await _destinationContainer.UpsertItemAsync(strippedItem, cancellationToken: cancellationToken);
 				if (item.ContainsKey("replication_status"))
 				{
 					// If the item was previously marked as failed, we remove the replication fields
-					await RemoveErrorDetailsFromSourceDocumentAsync(item, cancellationToken).ConfigureAwait(false);
+					await RemoveErrorDetailsFromSourceDocumentAsync(item, cancellationToken);
 				}
 			}
 			catch (TaskCanceledException tcex)
@@ -302,7 +302,7 @@ public class ContainerReplicationProcessor : IContainerReplicationProcessor
 					return;
 				}
 
-				await PatchSourceDocumentWithErrorDetailsAsync(item, ex, cancellationToken).ConfigureAwait(false);
+				await PatchSourceDocumentWithErrorDetailsAsync(item, ex, cancellationToken);
 			}
 		}
 	}
@@ -320,7 +320,7 @@ public class ContainerReplicationProcessor : IContainerReplicationProcessor
 				PatchOperation.Remove("/replication_attempts"),
 			};
 
-			await _sourceContainer.PatchItemStreamAsync(item["id"] as string, partitionKey, patchOperations, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await _sourceContainer.PatchItemStreamAsync(item["id"] as string, partitionKey, patchOperations, cancellationToken: cancellationToken);
 		}
 		catch (Exception ex)
 		{
@@ -346,7 +346,7 @@ public class ContainerReplicationProcessor : IContainerReplicationProcessor
 				id: item["id"] as string,
 				partitionKey: partitionKey,
 				patchOperations: patchOperations,
-				cancellationToken: cancellationToken).ConfigureAwait(false);
+				cancellationToken: cancellationToken);
 		}
 		catch (Exception updateEx)
 		{

@@ -33,12 +33,14 @@ jobs:
       - name: Pack
         if: github.event_name == 'release'
         run: dotnet pack -c Release --no-build --include-symbols --include-source -p:SymbolPackageFormat=snupkg -o ./artifacts
+      - name: Pack
+        if: github.event_name == 'release'
+        run: dotnet publish -c Release
       - name: "Publish Artifacts"
         if: github.event_name == 'release'
         uses: actions/upload-artifact@v4
         with:
-          path: "./artifacts"
-          name: Packages
+          path: "./artifacts/"
 
   push-nuget:
     name: "Push NuGet Packages"
@@ -48,12 +50,49 @@ jobs:
     steps:
       - name: "Download Artifacts"
         uses: actions/download-artifact@v4
-        with:
-          name: Packages
-          path: "./artifacts"
       - name: "Install .NET"
         uses: actions/setup-dotnet@v4
       - name: "Push Package"
         run: dotnet nuget push './artifacts/*.nupkg' -k $NUGET_AUTH_TOKEN -s https://api.nuget.org/v3/index.json
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_API_KEY }}
+
+  push-docker:
+    name: "Push Docker Images"
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+      - name: "Download Artifacts"
+        uses: actions/download-artifact@v4
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            goyalvaibhav/cosmosreplication
+            ghcr.io/cosmosreplication/cosmosreplication
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platform: linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}

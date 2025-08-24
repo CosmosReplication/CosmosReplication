@@ -50,8 +50,8 @@ public class ContainerReplicationEstimator(
 						.GetContainer(config.LeaseDatabase, config.LeaseContainer);
 
 					// Checks if all required containers exist.
-					await sourceContainer.ReadContainerAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
-					await leaseContainer.ReadContainerAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+					await sourceContainer.ReadContainerAsync(cancellationToken: cancellationToken);
+					await leaseContainer.ReadContainerAsync(cancellationToken: cancellationToken);
 
 					var changeFeedEstimator = sourceContainer
 						.GetChangeFeedEstimatorBuilder(replicationName, ReportEstimatedPendingChangesAsync, TimeSpan.FromSeconds(60))
@@ -86,7 +86,7 @@ public class ContainerReplicationEstimator(
 				try
 				{
 					logger.ServiceStarting(nameof(ContainerReplicationEstimator));
-					await _changeFeedEstimator.StartAsync().ConfigureAwait(false);
+					await _changeFeedEstimator.StartAsync();
 					Started = true;
 					logger.ServiceStarted(nameof(ContainerReplicationEstimator));
 				}
@@ -113,7 +113,7 @@ public class ContainerReplicationEstimator(
 			if (Initialized && Started)
 			{
 				logger.ServiceStopping(nameof(ContainerReplicationEstimator));
-				await _changeFeedEstimator.StopAsync().ConfigureAwait(false);
+				await _changeFeedEstimator.StopAsync();
 				logger.ServiceStopped(nameof(ContainerReplicationEstimator));
 			}
 			else if (!Initialized)

@@ -20,7 +20,7 @@ public static class ServiceCollectionExtensions
 			.ValidateOnStart();
 
 		services.AddSingleton<ICosmosClientFactory, CosmosClientFactory>();
-
+		services.AddSingleton<IReplicationMetrics, ReplicationMetrics>();
 		services.AddSingleton(provider =>
 		{
 			var logger = provider.GetRequiredService<ILogger<ContainerReplicationProcessor>>();
@@ -71,7 +71,7 @@ public static class ServiceCollectionExtensions
 						replicationConfig.Name,
 						config) as IContainerReplicationEstimator).ToList().AsReadOnly();
 		});
-
+		services.AddHealthChecks().AddCheck<ReplicationEstimatorHealthCheck>("Replication Estimator Health Check", tags: ["cosmosreplication"]);
 		services.AddHostedService<ReplicationEstimatorService>();
 		return services;
 	}
