@@ -17,7 +17,6 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/CosmosReplication/CosmosReplication/</PackageProjectUrl>
-    <PackageIcon>Icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/CosmosReplication/CosmosReplication.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>https://github.com/CosmosReplication/CosmosReplication/releases</PackageReleaseNotes>
@@ -34,10 +33,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" />
     <PackageReference Include="Newtonsoft.Json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\Images\Icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
