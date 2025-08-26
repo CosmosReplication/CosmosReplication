@@ -11,7 +11,18 @@
     <Product>CosmosReplication</Product>
     <Description>CosmosReplication</Description>
     <PackageTags>cosmos;cosmosdb;replication;azure;datamigration;data;datareplication</PackageTags>
+    <Authors>Vaibhav Goyal</Authors>
+    <Company>Vaibhav Goyal</Company>
+    <Copyright>Copyright © Vaibhav Goyal. All rights Reserved</Copyright>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/CosmosReplication/CosmosReplication/</PackageProjectUrl>
+    <PackageIcon>Icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/CosmosReplication/CosmosReplication.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>https://github.com/CosmosReplication/CosmosReplication/releases</PackageReleaseNotes>
   </PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" />

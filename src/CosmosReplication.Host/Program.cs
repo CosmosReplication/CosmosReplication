@@ -3,6 +3,7 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using CosmosReplication;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using OpenTelemetry;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddOpenTelemetry(logging =>
@@ -17,8 +18,13 @@ if (!string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNEC
 	builder.Services.AddOpenTelemetry().UseAzureMonitor();
 }
 
+if (!string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]))
+{
+	builder.Services.AddOpenTelemetry().UseOtlpExporter();
+}
+
 builder.Services.AddHealthChecks();
-if (builder.Configuration.GetValue("ENABLE_REPLICATION_ESTIMATOR", false))
+if (builder.Configuration.GetValue("ADD_REPLICATION_ESTIMATOR", false))
 {
 	builder.Services.AddCosmosReplicationEstimator("ReplicationConfiguration");
 }
