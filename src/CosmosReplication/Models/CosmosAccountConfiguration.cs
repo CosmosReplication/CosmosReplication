@@ -1,14 +1,14 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CosmosReplication.Models;
 
 public class CosmosAccountConfiguration
 {
-	[Required]
-	public required string AccountName { get; set; }
+    [Required]
+    public required string AccountName { get; set; }
 
-	[Url]
-	public string? AccountEndpoint { get; set; }
+    [Url]
+    public string? AccountEndpoint { get; set; }
 
-	public string? ConnectionString { get; set; }
+    public string? ConnectionString { get; set; }
 }

@@ -1,27 +1,29 @@
 <Project>
-    <PropertyGroup>
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    </PropertyGroup>
-    <ItemGroup>
-        <!-- Add shared package versions here -->
-        <PackageVersion Include="Azure.Identity" Version="1.14.2" />
-        <PackageVersion Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.3.0" />
-        <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.52.1" />
-        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
-        <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions"
-            Version="9.0.8" />
-        <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks"
-            Version="9.0.8" />
-        <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
-        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.8" />
-        <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="9.0.8" />
-        <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15" />
-        <PackageVersion Include="MinVer" Version="6.0.0" />
-        <PackageVersion Include="MSTest.Analyzers" Version="3.10.2" />
-        <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
-        <PackageVersion Include="Roslynator.Analyzers" Version="4.14.0" />
-        <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
-    </ItemGroup>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Add shared package versions here -->
+    <PackageVersion Include="Azure.Identity" Version="1.14.2" />
+    <PackageVersion Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.3.0" />
+    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.52.1" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions"
+      Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks"
+      Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15" />
+    <PackageVersion Include="MinVer" Version="6.0.0" />
+    <PackageVersion Include="MSTest.Analyzers" Version="3.10.2" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.14.0" />
+    <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
+    <PackageVersion Include="KubernetesClient" Version="11.0.9" />
+    <PackageVersion Include="Microsoft.VisualStudio.Threading.Only" Version="17.14.15" />
+  </ItemGroup>
 </Project>

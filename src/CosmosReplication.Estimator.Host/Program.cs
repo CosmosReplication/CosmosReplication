@@ -1,9 +1,12 @@
 ﻿using CosmosReplication;
+using CosmosReplication.Estimator.Host;
 using CosmosReplication.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddDefaultHealthChecks().ConfigureOpenTelemetry();
-builder.Services.AddCosmosReplication("ReplicationConfiguration", ["startup"]);
+builder.Services.AddHttpClient();
+builder.Services.AddCosmosReplicationEstimator("ReplicationConfiguration", ["ready"]);
+builder.Services.AddHostedService<Worker>();
 
 await using var app = builder.Build();
 app.MapDefaultEndpoints();

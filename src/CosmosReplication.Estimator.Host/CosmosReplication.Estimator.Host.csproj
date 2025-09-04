@@ -6,19 +6,25 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <PublishDir>../../artifacts/CosmosReplication.Host</PublishDir>
+    <PublishDir>../../artifacts/CosmosReplication.Estimator.Host</PublishDir>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../CosmosReplication.ServiceDefaults/CosmosReplication.ServiceDefaults.csproj" />
+    <PackageReference Include="KubernetesClient" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Only" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference
+      Include="../CosmosReplication.ServiceDefaults/CosmosReplication.ServiceDefaults.csproj" />
     <ProjectReference Include="../CosmosReplication/CosmosReplication.csproj" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Content Update="appsettings.Development.json" Condition="Exists('appsettings.Development.json')">
+    <Content Update="appsettings.Development.json"
+      Condition="Exists('appsettings.Development.json')">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
-
 </Project>

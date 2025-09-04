@@ -1,14 +1,14 @@
-namespace CosmosReplication.Interfaces;
+﻿namespace CosmosReplication.Interfaces;
 
 public interface IContainerReplicationProcessor
 {
-	public bool Initialized { get; }
+    public bool Initialized { get; }
 
-	public bool Started { get; }
+    public bool Started { get; }
 
-	public Task<bool> InitializeAsync(CancellationToken cancellationToken);
+    public Task<bool> InitializeAsync(CancellationToken cancellationToken);
 
-	public Task StartAsync();
+    public Task StartAsync();
 
-	public Task StopAsync();
+    public Task StopAsync();
 }

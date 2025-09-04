@@ -11,30 +11,11 @@ root = true
 # All Files
 [*]
 charset = utf-8
-csharp_style_prefer_method_group_conversion = true:silent
-csharp_style_prefer_primary_constructors = true:suggestion
-csharp_style_prefer_top_level_statements = true:silent
 end_of_line = crlf
-indent_size = 4
-indent_style = tab
+indent_style = space
+indent_size = 2
 insert_final_newline = true
-tab_width = 4
 trim_trailing_whitespace = true
-
-# Type members
-dotnet_hide_advanced_members = false
-dotnet_member_insertion_location = with_other_members_of_the_same_kind
-dotnet_property_generation_behavior = prefer_throwing_properties
-
-# Symbol search
-dotnet_search_reference_assemblies = true
-
-# Nullability settings
-# Enable nullable reference types
-dotnet_build_property.Nullable = enable
-
-# Enable or disable the analyzers
-dotnet_analyzer_diagnostic.severity = warning
 
 # Visual Studio XML Project Files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
@@ -76,6 +57,28 @@ indent_style = tab
 # .NET Style Rules
 # https://docs.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/language-rules#net-style-rules
 [*.{cs,csx,cake,vb,vbx}]
+indent_size = 4
+insert_final_newline = true
+charset = utf-8-bom
+
+# Type members
+dotnet_hide_advanced_members = false
+dotnet_member_insertion_location = with_other_members_of_the_same_kind
+dotnet_property_generation_behavior = prefer_throwing_properties
+
+# Symbol search
+dotnet_search_reference_assemblies = true
+
+# Nullability settings
+# Enable nullable reference types
+dotnet_build_property.Nullable = enable
+
+# Enable or disable the analyzers
+dotnet_analyzer_diagnostic.severity = warning
+
+csharp_style_prefer_method_group_conversion = false
+csharp_style_prefer_primary_constructors = false
+csharp_style_prefer_top_level_statements = true:suggestion
 
 # Non-private static fields are PascalCase
 dotnet_naming_rule.non_private_static_fields_should_be_pascal_case.severity = warning
@@ -132,7 +135,7 @@ dotnet_naming_style.internal_error_style.capitalization = pascal_case
 dotnet_naming_style.internal_error_style.required_prefix = ____INTERNAL_ERROR____
 dotnet_naming_style.internal_error_style.required_suffix = ____INTERNAL_ERROR____
 
-# Simplify interpolation 
+# Simplify interpolation
 dotnet_diagnostic.IDE0071.severity = warning
 
 # Allow multiple blank lines
@@ -724,7 +727,7 @@ dotnet_diagnostic.CA1827.severity = suggestion
 dotnet_diagnostic.CA1828.severity = silent
 
 # Use Length/Count property instead of Enumerable.Count() method!
-# Examples in Rock Your Code: Code Performance in Microsoft .NET 
+# Examples in Rock Your Code: Code Performance in Microsoft .NET
 dotnet_diagnostic.CA1829.severity = error
 
 # Prefer strongly-typed Append and Insert method overloads on StringBuilder.
@@ -885,7 +888,7 @@ dotnet_diagnostic.CA1872.severity = warning
 # The UTF-7 encoding is insecure
 dotnet_diagnostic.SYSLIB0001.severity = error
 
-dotnet_diagnostic.PERF001.severity = warning 
+dotnet_diagnostic.PERF001.severity = warning
 
 # PrincipalPermissionAttribute is obsolete
 dotnet_diagnostic.SYSLIB0002.severity = error
@@ -1055,7 +1058,7 @@ dotnet_diagnostic.SYSLIB0056.severity = warning
 # SYSLIB0057: X509Certificate2 and X509Certificate constructors for binary and file content are obsolete
 dotnet_diagnostic.SYSLIB0057.severity = warning
 
-# The KeyExchangeAlgorithm, KeyExchangeStrength, CipherAlgorithm, CipherAlgorithmStrength, HashAlgorithm, and HashStrength properties of SslStream are obsolete. 
+# The KeyExchangeAlgorithm, KeyExchangeStrength, CipherAlgorithm, CipherAlgorithmStrength, HashAlgorithm, and HashStrength properties of SslStream are obsolete.
 dotnet_diagnostic.SYSLIB0058.severity = warning
 
 # SystemEvents.EventsThreadShutdown callbacks aren't run before the process exits
@@ -1191,7 +1194,7 @@ dotnet_diagnostic.SYSLIB1052.severity = error
 dotnet_diagnostic.SYSLIB1053.severity = error
 
 # Use LibraryImportAttribute instead of DllImportAttribute to generate p/invoke marshalling code at compile time.
-dotnet_diagnostic.SYSLIB1054.severity = error 
+dotnet_diagnostic.SYSLIB1054.severity = error
 
 # Invalid CustomMarshallerAttribute usage.
 dotnet_diagnostic.SYSLIB1055.severity = error
@@ -1238,7 +1241,7 @@ dotnet_diagnostic.SYSLIB1075.severity = error
 # Invalid GeneratedComInterfaceAttribute usage.
 dotnet_diagnostic.SYSLIB1090.severity = error
 
-# Method is declared in different partial declaration than the GeneratedComInterface attribute. 
+# Method is declared in different partial declaration than the GeneratedComInterface attribute.
 dotnet_diagnostic.SYSLIB1091.severity = error
 
 # Usage of LibraryImport or GeneratedComInterface attribute does not follow recommendation.
@@ -1256,10 +1259,10 @@ dotnet_diagnostic.SYSLIB1095.severity = error
 #  Use GeneratedComInterfaceAttribute instead of ComImportAttribute to generate COM marshalling code at compile time
 dotnet_diagnostic.SYSLIB1096.severity = error
 
-# This type implements at least one type with the GeneratedComInterfaceAttribute attribute. 
+# This type implements at least one type with the GeneratedComInterfaceAttribute attribute.
 dotnet_diagnostic.SYSLIB1097.severity = error
 
-#  .NET COM hosting with EnableComHosting only supports built-in COM interop. 
+#  .NET COM hosting with EnableComHosting only supports built-in COM interop.
 dotnet_diagnostic.SYSLIB1098.severity = error
 
 #  COM Interop APIs on System.Runtime.InteropServices.Marshal do not support source-generated COM and will fail at run time.
@@ -1277,7 +1280,7 @@ dotnet_diagnostic.SYSLIB1203.severity = error
 # Deriving from a GeneratedComInterface-attributed interface defined in another assembly is not supported
 dotnet_diagnostic.SYSLIB1230.severity = error
 
-# Type is not supported. 
+# Type is not supported.
 dotnet_diagnostic.SYSLIB1100.severity = error
 
 # Property on type is not supported.
@@ -2016,10 +2019,10 @@ dotnet_diagnostic.IDE0083.severity = warning
 dotnet_diagnostic.IDE0084.severity = suggestion
 visual_basic_style_prefer_isnot_expression = true : suggestion
 
-# Use block-scoped namespace 
+# Use block-scoped namespace
 dotnet_diagnostic.IDE0160.severity = suggestion
 
-# Use file-scoped namespace 
+# Use file-scoped namespace
 dotnet_diagnostic.IDE0161.severity = suggestion
 
 # Simplify property pattern
@@ -2034,7 +2037,7 @@ dotnet_diagnostic.IDE0200.severity = warning
 # Convert to top-level statements
 dotnet_diagnostic.IDE0210.severity = warning
 
-# Convert to 'Program.Main' style program 
+# Convert to 'Program.Main' style program
 dotnet_diagnostic.IDE0211.severity = suggestion
 
 # Add explicit cast in foreach loop
@@ -2095,7 +2098,7 @@ dotnet_diagnostic.IDE1006.severity = silent
 #Use collection expression for array
 dotnet_diagnostic.IDE0300.severity = warning
 
-# Use collection expression for empty 
+# Use collection expression for empty
 dotnet_diagnostic.IDE0301.severity = warning
 
 # Use collection expression for stackalloc
@@ -2358,10 +2361,10 @@ dotnet_diagnostic.IL3005.severity = error
 
 #### Miscellaneous Rules ####
 
-#Remove invalid global 'SuppressMessageAttribute' 
+#Remove invalid global 'SuppressMessageAttribute'
 dotnet_diagnostic.IDE0076.severity = silent
 
-#Avoid legacy format target in global 'SuppressMessageAttribute' 
+#Avoid legacy format target in global 'SuppressMessageAttribute'
 dotnet_diagnostic.IDE0077.severity = warning
 
 #### StyleCop Rules ####
@@ -2690,7 +2693,7 @@ dotnet_diagnostic.IDE0110.severity = warning
 # Examples in Rock Your Code: Coding Standards for Microsoft .NET
 dotnet_diagnostic.IDE0140.severity = suggestion
 
-# Prefer 'null' check over type check 
+# Prefer 'null' check over type check
 dotnet_diagnostic.IDE0150.severity = warning
 
 # Expression-level preferences
@@ -2815,7 +2818,7 @@ dotnet_diagnostic.CS1591.severity = none
 # Missing XML comment for publicly visible type or member 'Type_or_Member'
 dotnet_diagnostic.CS1591.severity = none
 
-### MSTest Rules 
+### MSTest Rules
 [*.{cs,vb}]
 
 # Explicitly enable or disable tests parallelization

@@ -29,7 +29,7 @@ jobs:
       - name: Dotnet Restore
         run: dotnet restore
       - name: Dotnet Format
-        run: dotnet format --verify-no-changes -v diagnostic
+        run: dotnet format --verify-no-changes --severity info
       - name: Dotnet Build
         run: dotnet build -c Release --no-restore
       # - name: Test
@@ -66,13 +66,6 @@ jobs:
         run: dotnet nuget push './artifacts/*.nupkg' -k $NUGET_AUTH_TOKEN -s https://api.nuget.org/v3/index.json
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_API_KEY }}
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            goyalvaibhav/cosmosreplication
-            ghcr.io/cosmosreplication/cosmosreplication
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
@@ -86,12 +79,37 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Build and Push Docker Image
+      - name: Docker meta for cosmosreplication image
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            goyalvaibhav/cosmosreplication
+            ghcr.io/cosmosreplication/cosmosreplication
+      - name: Docker build and push cosmosreplication image
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: CosmosReplication.Host.Dockerfile
           push: true
           platform: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
+      - name: Docker meta for cosmosreplication-estimator image
+        id: meta-estimator
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            goyalvaibhav/cosmosreplication-estimator
+            ghcr.io/cosmosreplication/cosmosreplication-estimator
+      - name: Docker build and push cosmosreplication-estimator image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: CosmosReplication.Estimator.Host.Dockerfile
+          push: true
+          platform: linux/amd64
+          tags: ${{ steps.meta-estimator.outputs.tags }}
+          labels: ${{ steps.meta-estimator.outputs.labels }}
+          annotations: ${{ steps.meta-estimator.outputs.annotations }}

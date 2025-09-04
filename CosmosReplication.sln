@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosReplication", "src\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosReplication.Host", "src\CosmosReplication.Host\CosmosReplication.Host.csproj", "{660E4E63-B40C-408F-B2B9-68331FE6FC23}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosReplication.Estimator.Host", "src\CosmosReplication.Estimator.Host\CosmosReplication.Estimator.Host.csproj", "{CD2B24CB-C468-460C-B5D7-BEC510652C27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosReplication.ServiceDefaults", "src\CosmosReplication.ServiceDefaults\CosmosReplication.ServiceDefaults.csproj", "{B6F2ACB1-81A8-45C9-A9EA-EFB773929EF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,14 @@ Global
 		{660E4E63-B40C-408F-B2B9-68331FE6FC23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{660E4E63-B40C-408F-B2B9-68331FE6FC23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{660E4E63-B40C-408F-B2B9-68331FE6FC23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD2B24CB-C468-460C-B5D7-BEC510652C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD2B24CB-C468-460C-B5D7-BEC510652C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD2B24CB-C468-460C-B5D7-BEC510652C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD2B24CB-C468-460C-B5D7-BEC510652C27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6F2ACB1-81A8-45C9-A9EA-EFB773929EF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6F2ACB1-81A8-45C9-A9EA-EFB773929EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6F2ACB1-81A8-45C9-A9EA-EFB773929EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6F2ACB1-81A8-45C9-A9EA-EFB773929EF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,5 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{2763A6F8-31EB-4652-9C6F-621E9F88D03C} = {F12FA2F3-C340-46CA-98B5-AF7F1A1D31E6}
 		{660E4E63-B40C-408F-B2B9-68331FE6FC23} = {F12FA2F3-C340-46CA-98B5-AF7F1A1D31E6}
+		{CD2B24CB-C468-460C-B5D7-BEC510652C27} = {F12FA2F3-C340-46CA-98B5-AF7F1A1D31E6}
+		{B6F2ACB1-81A8-45C9-A9EA-EFB773929EF0} = {F12FA2F3-C340-46CA-98B5-AF7F1A1D31E6}
 	EndGlobalSection
 EndGlobal

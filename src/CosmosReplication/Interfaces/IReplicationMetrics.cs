@@ -1,6 +1,6 @@
-namespace CosmosReplication.Interfaces;
+﻿namespace CosmosReplication.Interfaces;
 
 public interface IReplicationMetrics
 {
-	public void RecordEstimatedPendingChanges(long count, KeyValuePair<string, object?>[] tags);
+    public void RecordEstimatedPendingChanges(long count, KeyValuePair<string, object?>[] tags);
 }
