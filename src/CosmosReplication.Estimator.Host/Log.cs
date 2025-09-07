@@ -14,12 +14,12 @@ public static partial class Log
     [LoggerMessage(LogLevel.Information, "Elected leader, starting replication estimator service.")]
     public static partial void ElectedLeader(this ILogger logger);
 
-    [LoggerMessage(LogLevel.Information, "Replication host startup endpoint returned success: {url}")]
-    public static partial void ReplicationHostStartupSuccess(this ILogger logger, string url);
+    [LoggerMessage(LogLevel.Information, "Replication host ready endpoint returned success: {url}")]
+    public static partial void ReplicationHostReadySuccess(this ILogger logger, string url);
 
-    [LoggerMessage(LogLevel.Warning, "Failed to query replication host startup at {url}")]
-    public static partial void ReplicationHostStartupFailed(this ILogger logger, string url, Exception ex);
+    [LoggerMessage(LogLevel.Warning, "Failed to query replication host ready at {url}")]
+    public static partial void ReplicationHostReadyFailed(this ILogger logger, string url, Exception ex);
 
-    [LoggerMessage(LogLevel.Warning, "Timed out waiting for replication host startup URL {url} after {timeout}")]
-    public static partial void ReplicationHostStartupTimeout(this ILogger logger, string url, TimeSpan timeout);
+    [LoggerMessage(LogLevel.Warning, "Timed out waiting for replication host ready URL {url} after {timeout}")]
+    public static partial void ReplicationHostReadyTimeout(this ILogger logger, string url, TimeSpan timeout);
 }

@@ -22,7 +22,7 @@ docker run --rm -d \
   -e ASPNETCORE_ENVIRONMENT=Development \
   -e ReplicationConfiguration__CosmosAccounts__0__ConnectionString="${COSMOS_CONNECTION_STRING}" \
   -e APPLICATIONINSIGHTS_CONNECTION_STRING="${APPLICATIONINSIGHTS_CONNECTION_STRING}" \
-  -e ReplicationHost__StartupUrl="http://localhost:8080/healthz/startup" \
+  -e ReplicationHost__ReadyUrl="http://localhost:8080/healthz/ready" \
   -v "$APPSETTINGS_SRC:/app/appsettings.Development.json:ro" \
   --name "cosmosreplication-estimator" \
   "cosmosreplication-estimator"

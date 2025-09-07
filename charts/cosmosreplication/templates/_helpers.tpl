@@ -42,6 +42,15 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
+{{- define "cosmosreplication-estimator.labels" -}}
+helm.sh/chart: {{ include "cosmosreplication.chart" . }}
+{{ include "cosmosreplication-estimator.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
 {{/*
 Selector labels
 */}}
@@ -49,6 +58,13 @@ Selector labels
 app.kubernetes.io/name: {{ include "cosmosreplication.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{- define "cosmosreplication-estimator.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "cosmosreplication.name" . }}-estimator
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+
 
 {{/*
 Create the name of the service account to use

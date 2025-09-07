@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
+using System.Text.Json;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -15,12 +17,14 @@ namespace CosmosReplication.ServiceDefaults;
 
 public static class HostingExtensions
 {
+    private static readonly JsonSerializerOptions HealthJsonOptions = new() { WriteIndented = true };
+
     public static IHostApplicationBuilder AddDefaultHealthChecks(this IHostApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
 
         // Add a default liveness check to ensure app is responsive
-        builder.Services.AddHealthChecks().AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
+        builder.Services.AddHealthChecks().AddCheck("self", () => HealthCheckResult.Healthy(), ["live", "ready", "startup"]);
         return builder;
     }
 
@@ -94,6 +98,31 @@ public static class HostingExtensions
         app.MapHealthChecks("/healthz/live", new HealthCheckOptions
         {
             Predicate = reg => reg.Tags.Contains("live"),
+        });
+
+        // Returns detailed JSON results for all health checks
+        app.MapHealthChecks("/healthz/all", new HealthCheckOptions
+        {
+            Predicate = _ => true,
+            ResponseWriter = async (context, report) =>
+            {
+                context.Response.ContentType = "application/json";
+                var result = new
+                {
+                    status = report.Status.ToString(),
+                    totalDuration = Convert.ToInt64(report.TotalDuration.TotalMilliseconds),
+                    checks = report.Entries.Select(kvp => new
+                    {
+                        name = kvp.Key,
+                        status = kvp.Value.Status.ToString(),
+                        description = kvp.Value.Description,
+                        duration = Convert.ToInt64(kvp.Value.Duration.TotalMilliseconds),
+                        exception = kvp.Value.Exception?.Message,
+                        data = kvp.Value.Data.ToDictionary(d => d.Key, d => d.Value),
+                    }),
+                };
+                await context.Response.WriteAsync(JsonSerializer.Serialize(result, HealthJsonOptions));
+            },
         });
 
         return app;

@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "cosmosreplication.fullname" . }}
+  name: {{ include "cosmosreplication.fullname" . }}-estimator
   labels:
-    {{- include "cosmosreplication.labels" . | nindent 4 }}
+    {{- include "cosmosreplication-estimator.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.estimator.replicaCount }}
   selector:
     matchLabels:
-      {{- include "cosmosreplication.selectorLabels" . | nindent 6 }}
+      {{- include "cosmosreplication-estimator.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with (.Values.estimator.podAnnotations | default .Values.podAnnotations) }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "cosmosreplication.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
+        {{- include "cosmosreplication-estimator.labels" . | nindent 8 }}
+        {{- with (.Values.estimator.podLabels | default .Values.podLabels) }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
@@ -26,35 +26,35 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "cosmosreplication.serviceAccountName" . }}
-      {{- with .Values.podSecurityContext }}
+      {{- with .Values.estimator.podSecurityContext | default .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
-          {{- with .Values.securityContext }}
+        - name: {{ .Chart.Name }}-estimator
+          {{- with .Values.estimator.securityContext | default .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.estimator.image.repository }}:{{ .Values.estimator.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.estimator.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
-          {{- with .Values.livenessProbe }}
+          {{- with .Values.estimator.livenessProbe | default .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.readinessProbe }}
+          {{- with .Values.estimator.readinessProbe | default .Values.readinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.startupProbe }}
+          {{- with .Values.estimator.startupProbe | default .Values.startupProbe }}
           startupProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.resources }}
+          {{- with .Values.estimator.resources | default .Values.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -69,22 +69,22 @@ spec:
       volumes:
         - name: appsettings
           configMap:
-            name: {{ include "cosmosreplication.fullname" . }}
+            name: {{ include "cosmosreplication.fullname" . }}-estimator
             items:
               - key: appsettings.json
                 path: appsettings.json
-        {{- with .Values.volumes }}
+        {{- with .Values.estimator.volumes }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.estimator.nodeSelector | default .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.estimator.affinity | default .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.tolerations | default .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

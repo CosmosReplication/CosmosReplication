@@ -35,15 +35,15 @@ public sealed class Worker : IHostedService, IDisposable
             return;
         }
 
-        var replicationHostStartupUrl = _configuration["ReplicationHost:StartupUrl"];
-        var replicationHostStartupTimeout = TimeSpan.FromSeconds(_configuration.GetValue("ReplicationHost:StartupTimeout", 60));
+        var replicationHostReadyUrl = _configuration["ReplicationHost:ReadyUrl"];
+        var replicationHostReadyTimeout = TimeSpan.FromSeconds(_configuration.GetValue("ReplicationHost:ReadyTimeout", 60));
 
-        if (!string.IsNullOrWhiteSpace(replicationHostStartupUrl) && !await WaitForReplicationStartAsync(replicationHostStartupUrl, replicationHostStartupTimeout, cancellationToken))
+        if (!string.IsNullOrWhiteSpace(replicationHostReadyUrl) && !await WaitForReplicationReadyAsync(replicationHostReadyUrl, replicationHostReadyTimeout, cancellationToken))
         {
-            _logger.ReplicationHostStartupTimeout(replicationHostStartupUrl, replicationHostStartupTimeout);
+            _logger.ReplicationHostReadyTimeout(replicationHostReadyUrl, replicationHostReadyTimeout);
         }
 
-        var electionEnabled = _configuration.GetValue("LEADER_ELECTION__ENABLED", false);
+        var electionEnabled = _configuration.GetValue("LeaderElection:Enabled", false);
         if (!electionEnabled)
         {
             _logger.LeaderElectionDisabled();
@@ -109,19 +109,19 @@ public sealed class Worker : IHostedService, IDisposable
         _ = _joinableTaskFactory!.RunAsync(async () => await _replicationEstimatorService.StartAsync(CancellationToken.None));
     }
 
-    private async Task<bool> WaitForReplicationStartAsync(string replicationHostStartupUrl, TimeSpan timeout, CancellationToken ct)
+    private async Task<bool> WaitForReplicationReadyAsync(string replicationHostReadyUrl, TimeSpan timeout, CancellationToken ct)
     {
         using var httpClient = _httpClientFactory.CreateClient();
         httpClient.Timeout = TimeSpan.FromSeconds(10);
-        var replicationHostStartupUri = new Uri(replicationHostStartupUrl);
+        var replicationHostReadyUri = new Uri(replicationHostReadyUrl);
         var sw = Stopwatch.StartNew();
         while (!ct.IsCancellationRequested && sw.Elapsed < timeout)
         {
             try
             {
-                using var resp = await httpClient.GetAsync(replicationHostStartupUri, ct);
+                using var resp = await httpClient.GetAsync(replicationHostReadyUri, ct);
                 resp.EnsureSuccessStatusCode();
-                _logger.ReplicationHostStartupSuccess(replicationHostStartupUrl);
+                _logger.ReplicationHostReadySuccess(replicationHostReadyUrl);
                 return true;
             }
             catch (OperationCanceledException) when (ct.IsCancellationRequested)
@@ -130,7 +130,7 @@ public sealed class Worker : IHostedService, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.ReplicationHostStartupFailed(replicationHostStartupUrl, ex);
+                _logger.ReplicationHostReadyFailed(replicationHostReadyUrl, ex);
             }
 
             await Task.Delay(5000, ct);

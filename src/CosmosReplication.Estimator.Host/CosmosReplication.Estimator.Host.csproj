@@ -26,5 +26,9 @@
       Condition="Exists('appsettings.Development.json')">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
+    <Content Update="appsettings.json"
+      Condition="Exists('appsettings.json')">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 </Project>

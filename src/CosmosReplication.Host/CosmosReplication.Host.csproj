@@ -10,13 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../CosmosReplication.ServiceDefaults/CosmosReplication.ServiceDefaults.csproj" />
+    <ProjectReference
+      Include="../CosmosReplication.ServiceDefaults/CosmosReplication.ServiceDefaults.csproj" />
     <ProjectReference Include="../CosmosReplication/CosmosReplication.csproj" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Content Update="appsettings.Development.json" Condition="Exists('appsettings.Development.json')">
+    <Content Update="appsettings.Development.json"
+      Condition="Exists('appsettings.Development.json')">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+    <Content Update="appsettings.json"
+      Condition="Exists('appsettings.json')">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
