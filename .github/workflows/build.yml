@@ -54,14 +54,6 @@ jobs:
           file: CosmosReplication.Estimator.Host.Dockerfile
           push: false
           platforms: linux/amd64
-      - name: "Setup Helm"
-        uses: azure/setup-helm@v4.3.0
-      - name: "Helm Lint"
-        run: helm lint ./charts/cosmosreplication
-      - name: "Helm Template"
-        run: helm template cosmosreplication ./charts/cosmosreplication
-      - name: "Helm Package"
-        run: helm package ./charts/cosmosreplication -d ./artifacts
       - name: "Upload Artifacts"
         if: github.event_name == 'release'
         uses: actions/upload-artifact@v4
