@@ -21,9 +21,10 @@
     <PackageVersion Include="MSTest.Analyzers" Version="3.10.2" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.12.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.14.0" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
-    <PackageVersion Include="KubernetesClient" Version="11.0.9" />
+    <PackageVersion Include="KubernetesClient" Version="17.0.14" />
     <PackageVersion Include="Microsoft.VisualStudio.Threading.Only" Version="17.14.15" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿using CosmosReplication;
+using CosmosReplication;
 using CosmosReplication.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);

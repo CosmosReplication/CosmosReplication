@@ -57,9 +57,6 @@ indent_style = tab
 # .NET Style Rules
 # https://docs.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/language-rules#net-style-rules
 [*.{cs,csx,cake,vb,vbx}]
-indent_size = 4
-insert_final_newline = true
-charset = utf-8-bom
 
 # Type members
 dotnet_hide_advanced_members = false
@@ -463,6 +460,8 @@ dotnet_diagnostic.SA1406.severity = warning
 # Examples in Rock Your Code: Coding Standards for Microsoft .NET
 dotnet_diagnostic.SA1409.severity = error
 
+dotnet_diagnostic.SA1413.severity = silent
+
 # Dispose created
 # Examples in Rock Your Code: Coding Standards for Microsoft .NET
 dotnet_diagnostic.IDISP001.severity = error
@@ -798,7 +797,7 @@ dotnet_diagnostic.CA1847.severity = error
 
 # Use the LoggerMessage delegates.
 # Examples in Rock Your Code: Code Performance in Microsoft .NET
-dotnet_diagnostic.CA1848.severity = error
+dotnet_diagnostic.CA1848.severity = none
 
 # Call async methods when in an async method ****!
 dotnet_diagnostic.CA1849.severity = error

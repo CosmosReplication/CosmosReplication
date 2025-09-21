@@ -1,8 +1,8 @@
-﻿namespace CosmosReplication.Interfaces;
+namespace CosmosReplication.Interfaces;
 
 public interface IReplicationEstimatorService
 {
-    public Task StartAsync(CancellationToken cancellationToken);
+  public Task StartAsync(CancellationToken cancellationToken);
 
-    public Task StopAsync();
+  public Task StopAsync();
 }
